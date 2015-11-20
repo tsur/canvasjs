@@ -1,0 +1,15 @@
+# node
+**/node_modules
+
+# npm
+npm-*
+
+#editors
+*~
+*.swp
+*.swo
+.idea
+.DS_Store
+
+# test
+test/browser-build.js

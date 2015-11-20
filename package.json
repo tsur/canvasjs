@@ -1,0 +1,12 @@
+{
+  "name": "canvasjs",
+  "version": "1.8.0",
+  "author": "Zuri Pabón",
+  "description": "CanvasJS charting library",
+  "main": "",
+  "scripts": {},
+  "repository": "https://github.com/Tsur/CanvasJS.git",
+  "license": "Creative Commons",
+  "dependencies": {},
+  "devDependencies": {},
+}
