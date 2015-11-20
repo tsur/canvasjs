@@ -2,10 +2,38 @@
   "name": "canvasjs",
   "version": "1.8.0",
   "description": "CanvasJS charting library",
-  "main": "",
-  "scripts": {},
+  "main": "src/main/index.js",
+  "scripts": {
+    "build": "browserify ./src/index.js --standalone 'CanvasJS' > dist/canvasjs.js && node_modules/uglify-js/bin/uglifyjs --compress --mangle -- dist/canvasjs.js > dist/canvasjs.min.js",
+    "docs": "rm -rf docs/out/$npm_package_version && jsdoc src --configure jsdoc.conf",
+    "plato": "babel -d es5 src && plato -r -d docs/plato -t 'CanvasJS' es5 && rm -rf es5",
+    "lint": "eslint --ext .js src",
+    "bump": "npm run bump:patch",
+    "bump:patch": "node script/bump.js patch",
+    "bump:minor": "node script/bump.js minor",
+    "bump:major": "node script/bump.js major"
+  },
   "repository": "https://github.com/Tsur/canvasjs.git",
   "license": "CC",
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {},
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015",
+            "stage-1"
+          ]
+        }
+      ]
+    ]
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm run build && git add . --all",
+      "pre-push": "npm run test"
+    }
+  }
 }
