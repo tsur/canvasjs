@@ -1,3 +1,9 @@
+
+import CanvasJSObject from './canvasjs';
+import TextBlock from './text_block';
+import RenderHelper from '../helpers/render';
+import {extend, getFontHeightInPixels} from '../helpers/utils';
+
 function Legend(chart, options, theme) {
   Legend.base.constructor.call(this, "Legend", options, theme);
 
@@ -25,6 +31,7 @@ function Legend(chart, options, theme) {
 
   this.horizontalSpacing = this.fontSize;
 }
+
 extend(Legend, CanvasJSObject);
 
 Legend.prototype.render = function () {
@@ -365,3 +372,5 @@ Legend.prototype.render = function () {
     x1: left, y1: top, x2: left + this.width, y2: top + this.height
   };
 }
+
+export default Legend;

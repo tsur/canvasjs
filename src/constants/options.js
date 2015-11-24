@@ -1,11 +1,11 @@
 
-	var isDebugMode = false;
+export const isDebugMode = false;
 
-	var isCanvasSupported = !!document.createElement("canvas").getContext;
+export const isCanvasSupported = !!document.createElement("canvas").getContext;
 	//isCanvasSupported = false;
 
 	//Default values for all Chart Elements that can be set by the user. CanvasJSObject.setOptions looks into this while setting the default/user-defined values.
-	var defaultOptions = {
+export const defaultOptions = {
 		Chart: {
 			width: 500,
 			height: 400,

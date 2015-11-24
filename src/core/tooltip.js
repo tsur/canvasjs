@@ -1,4 +1,9 @@
+
+import CanvasJSObject from './canvasjs';
+import {extend, isCanvasSupported} from '../helpers/utils';
+
 function ToolTip(chart, options, theme) {
+
   ToolTip.base.constructor.call(this, "ToolTip", options, theme);
 
   this.chart = chart;
@@ -12,6 +17,7 @@ function ToolTip(chart, options, theme) {
 
   this._initialize();
 }
+
 extend(ToolTip, CanvasJSObject);
 
 ToolTip.prototype._initialize = function () {
@@ -636,3 +642,5 @@ ToolTip.prototype.hide = function (resetOverlayedCanvas) {
   if (resetOverlayedCanvas)
     this.chart.resetOverlayedCanvas();
 }
+
+export default ToolTip;

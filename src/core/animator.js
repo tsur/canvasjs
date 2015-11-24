@@ -153,3 +153,5 @@ var AnimationHelper = {
     }
   }
 }
+
+export default Animator;

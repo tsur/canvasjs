@@ -1,4 +1,9 @@
+
+import CanvasJSObject from './canvasjs';
+import {extend} from '../helpers/utils';
+
 function TextBlock(ctx, options) {
+
   TextBlock.base.constructor.call(this, "TextBlock", options);
 
   this.ctx = ctx;
@@ -6,7 +11,9 @@ function TextBlock(ctx, options) {
   this._wrappedText = null;
   this._lineHeight = getFontHeightInPixels(this.fontFamily, this.fontSize, this.fontWeight);
 }
+
 extend(TextBlock, CanvasJSObject);
+
 TextBlock.prototype.render = function (preserveContext) {
   if (preserveContext)
     this.ctx.save();
@@ -184,3 +191,5 @@ TextBlock.prototype._getFontString = function () {
   //return this.fontStyle + " " + this.fontWeight + " " + this.fontSize + "px " + this.fontFamily
   return getFontString("", this, null);
 }
+
+export default TextBlock;

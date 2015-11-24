@@ -1,4 +1,10 @@
+
+import Title from './title';
+import CanvasJSObject from './canvasjs';
+import {extend} from '../helpers/utils';
+
 function Subtitle(chart, options) {
+
   Subtitle.base.constructor.call(this, "Subtitle", options, chart.theme);
 
   this.chart = chart;
@@ -21,4 +27,7 @@ function Subtitle(chart, options) {
 }
 
 extend(Subtitle, CanvasJSObject);
+
 Subtitle.prototype.render = Title.prototype.render;
+
+export default Subtitle;

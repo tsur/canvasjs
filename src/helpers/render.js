@@ -1,4 +1,5 @@
-var RenderHelper = {
+const RenderHelper = {
+
   drawMarker: function (x, y, ctx, markerType, markerSize, markerColor, markerBorderColor, markerBorderThickness) {
 
     if (!ctx)
@@ -113,3 +114,5 @@ var RenderHelper = {
   //	ctx.stroke();
   //}
 }
+
+export default RenderHelper;

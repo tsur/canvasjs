@@ -1,3 +1,6 @@
+
+import {createCanvas, getMouseCoordinates, isCanvasSupported} from '../helpers/utils';
+
 function EventManager(chart) {
   this.chart = chart;
   this.lastObjectId = 0;
@@ -200,3 +203,5 @@ EventManager.prototype.fireEvent = function (eventObjectMap, eventType, ev) {
     this.chart.pieDoughnutClickHandler.call(this.chart.data[eventObjectMap.dataSeriesIndex], eventParameter);
   }
 }
+
+export default EventManager;

@@ -1,3 +1,7 @@
+
+import CanvasJSObject from './canvasjs';
+import {extend} from '../helpers/utils';
+
 function StripLine(chart, options, theme, id, axis) {
   StripLine.base.constructor.call(this, "StripLine", options, theme, axis);
 
@@ -16,6 +20,7 @@ function StripLine(chart, options, theme, id, axis) {
     this._thicknessType = "value";
   }
 }
+
 extend(StripLine, CanvasJSObject);
 
 StripLine.prototype.render = function () {
@@ -67,3 +72,5 @@ StripLine.prototype.render = function () {
     this.ctx.globalAlpha = oldGlobalAlpha;
   }
 };
+
+export default StripLine;
