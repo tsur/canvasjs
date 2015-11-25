@@ -1,6 +1,6 @@
 
 import CanvasJSObject from './canvasjs';
-import {extend} from '../helpers/utils';
+import {extend, getProperty} from '../helpers/utils';
 
 function DataSeries(chart, options, theme, index, id) {
   DataSeries.base.constructor.call(this, "DataSeries", options, theme);

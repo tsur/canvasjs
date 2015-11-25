@@ -1,4 +1,5 @@
 
+import DataSeries from './data_series';
 import CanvasJSObject from './canvasjs';
 import TextBlock from './text_block';
 import RenderHelper from '../helpers/render';

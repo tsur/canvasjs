@@ -1,5 +1,6 @@
 
-import {isCanvasSupported} from '../helpers/utils';
+import AnimationHelper from '../helpers/animator';
+import {isCanvasSupported, drawRect, intToHexColorString} from '../helpers/utils';
 
 export default function (plotUnit) {
 	var ctx = plotUnit.targetCanvasCtx || this.plotArea.ctx;

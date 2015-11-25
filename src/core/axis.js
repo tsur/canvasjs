@@ -1,7 +1,7 @@
 
 import CanvasJSObject from './canvasjs';
 import TextBlock from './text_block';
-import {extend} from '../helpers/utils';
+import {extend, numberFormat, getLineDashArray} from '../helpers/utils';
 
 function Axis(chart, options, type, position) {
 
@@ -275,7 +275,7 @@ Axis.prototype.createLabelsAndCalculateWidth = function () {
 
 		this.createLabels();
 
-		for (i = 0; i < this._labels.length; i++) {
+		for (var i = 0; i < this._labels.length; i++) {
 
 			var textBlock = this._labels[i].textBlock;
 

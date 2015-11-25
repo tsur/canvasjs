@@ -1,6 +1,6 @@
 
 import CanvasJSObject from './canvasjs';
-import {extend} from '../helpers/utils';
+import {extend, getFontHeightInPixels, trimString, getFontString} from '../helpers/utils';
 
 function TextBlock(ctx, options) {
 

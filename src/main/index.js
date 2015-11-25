@@ -18,7 +18,7 @@ import {colorSets} from '../constants/themes';
 import {cultures} from '../constants/culture';
 import {numberFormat, dateFormat} from '../helpers/utils';
 
-export const Chart = (containerId, options) => {
+export function Chart(containerId, options) {
 
   const _chart = new Charts(containerId, options, this);
 

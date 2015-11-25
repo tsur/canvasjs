@@ -235,11 +235,11 @@ export function getFontHeightInPixels(fontFamily, fontSize, fontWeight) {
 }
 
 export function getLineDashArray(lineDashType, lineThickness) {
-	var lineDashArray = [];
-
 	lineDashType = lineDashType || "solid";
 
-	lineDashTypeMap = {
+	var lineDashArray = [];
+
+	var lineDashTypeMap = {
 		"solid": [],
 		"shortDash": [3, 1],
 		"shortDot": [1, 1],
@@ -944,3 +944,173 @@ export function convertPercentToValue(input, referenceValue) {
 
 	return referenceValue;
 }
+
+export function drawRect(ctx, x1, y1, x2, y2, color, borderThickness, borderColor, top, bottom, left, right, fillOpacity) {
+	if (typeof (fillOpacity) === "undefined")
+		fillOpacity = 1;
+
+	borderThickness = borderThickness || 0;
+	borderColor = borderColor || "black";
+	//alert("top"+ top + "bottom" + bottom + " lt" + left+ "rt" + right )
+	var a1 = x1, a2 = x2, b1 = y1, b2 = y2, edgeY, edgeX;
+	if (x2 - x1 > 15 && y2 - y1 > 15)
+		var bevelDepth = 8;
+	else
+		var bevelDepth = 0.35 * Math.min((x2 - x1), (y2 - y1));
+	//alert(a1 + "" + a2);
+	var color2 = "rgba(255, 255, 255, .4)";
+	var color3 = "rgba(255, 255, 255, 0.1)";
+	//color1 = "rgba(" + r + "," + g + ", " + b + ",1)";
+	var color1 = color;
+
+	ctx.beginPath();
+	ctx.moveTo(x1, y1);
+	ctx.save();
+	ctx.fillStyle = color1;
+
+	ctx.globalAlpha = fillOpacity;
+	ctx.fillRect(x1, y1, x2 - x1, y2 - y1);
+	ctx.globalAlpha = 1;
+
+	if (borderThickness > 0) {
+		var offset = borderThickness % 2 === 0 ? 0 : .5;
+		ctx.beginPath();
+		ctx.lineWidth = borderThickness;
+		ctx.strokeStyle = borderColor;
+		ctx.moveTo(x1, y1);
+		ctx.rect(x1 - offset, y1 - offset, x2 - x1 + 2 * offset, y2 - y1 + 2 * offset);
+		ctx.stroke();
+	}
+
+	ctx.restore();
+	//   ctx.beginPath();
+	if (top === true) {
+		// alert(x1 + "" + x2 + " " + bevelDepth);
+		ctx.save();
+		ctx.beginPath();
+		ctx.moveTo(x1, y1);
+		ctx.lineTo(x1 + bevelDepth, y1 + bevelDepth);
+		ctx.lineTo(x2 - bevelDepth, y1 + bevelDepth);
+		ctx.lineTo(x2, y1);
+		ctx.closePath();
+		var grd = ctx.createLinearGradient((x2 + x1) / 2, b1 + bevelDepth, (x2 + x1) / 2, b1);
+		grd.addColorStop(0, color1);
+		grd.addColorStop(1, color2);
+		ctx.fillStyle = grd;
+		ctx.fill();
+		//              ctx.stroke();
+		ctx.restore();
+	}
+
+
+	if (bottom === true) {
+		ctx.save();
+		ctx.beginPath();
+		ctx.moveTo(x1, y2);
+		ctx.lineTo(x1 + bevelDepth, y2 - bevelDepth);
+		ctx.lineTo(x2 - bevelDepth, y2 - bevelDepth);
+		ctx.lineTo(x2, y2);
+		ctx.closePath();
+		var grd = ctx.createLinearGradient((x2 + x1) / 2, b2 - bevelDepth, (x2 + x1) / 2, b2);
+		grd.addColorStop(0, color1);
+		grd.addColorStop(1, color2);
+		ctx.fillStyle = grd;
+		//       ctx.stroke();
+		ctx.fill();
+		ctx.restore();
+	}
+
+	if (left === true) {
+		//   alert(x1)
+		ctx.save();
+		ctx.beginPath();
+		ctx.moveTo(x1, y1)
+		ctx.lineTo(x1 + bevelDepth, y1 + bevelDepth);
+		ctx.lineTo(x1 + bevelDepth, y2 - bevelDepth);
+		ctx.lineTo(x1, y2);
+		ctx.closePath();
+		var grd = ctx.createLinearGradient(a1 + bevelDepth, (y2 + y1) / 2, a1, (y2 + y1) / 2);
+		grd.addColorStop(0, color1);
+		grd.addColorStop(1, color3);
+		ctx.fillStyle = grd;
+		ctx.fill();
+		//     ctx.stroke();
+		ctx.restore();
+	}
+
+
+	if (right === true) {
+		ctx.save();
+		ctx.beginPath();
+		ctx.moveTo(x2, y1)
+		ctx.lineTo(x2 - bevelDepth, y1 + bevelDepth);
+		ctx.lineTo(x2 - bevelDepth, y2 - bevelDepth);
+		ctx.lineTo(x2, y2);
+		var grd = ctx.createLinearGradient(a2 - bevelDepth, (y2 + y1) / 2, a2, (y2 + y1) / 2);
+		grd.addColorStop(0, color1);
+		grd.addColorStop(1, color3);
+		ctx.fillStyle = grd;
+		grd.addColorStop(0, color1);
+		grd.addColorStop(1, color3);
+		ctx.fillStyle = grd;
+		ctx.fill();
+		ctx.closePath();
+		//          ctx.stroke();
+		ctx.restore();
+	}
+	//
+
+}
+
+export function drawSegment(ctx, center, radius, color, type, theta1, theta2, fillOpacity, percentInnerRadius) {
+
+	if (typeof (fillOpacity) === "undefined")
+		fillOpacity = 1;
+
+	//IE8- FIX: In IE8- segment doesn't get draw if theta2 is equal to theta1 + 2*PI.
+	if (!isCanvasSupported) {
+		var theta2Mod = Number((theta2 % (2 * Math.PI)).toFixed(8));
+		var theta1Mod = Number((theta1 % (2 * Math.PI)).toFixed(8));
+		if (theta1Mod === theta2Mod)
+			theta2 -= .0001;
+	}
+
+	ctx.save();
+	ctx.globalAlpha = fillOpacity;
+
+	if (type === "pie") {
+		ctx.beginPath();
+		ctx.moveTo(center.x, center.y);
+		ctx.arc(center.x, center.y, radius, theta1, theta2, false);
+		ctx.fillStyle = color;
+		ctx.strokeStyle = "white";
+		ctx.lineWidth = 2;
+		//    ctx.shadowOffsetX = 2;
+		//    ctx.shadowOffsetY = 1;
+		//     ctx.shadowBlur = 2;
+		//    ctx.shadowColor = '#BFBFBF';
+		ctx.closePath();
+		//ctx.stroke();
+		ctx.fill();
+	}
+	else if (type === "doughnut") {
+		ctx.beginPath();
+		ctx.arc(center.x, center.y, radius, theta1, theta2, false);
+		ctx.arc(center.x, center.y, percentInnerRadius * radius, theta2, theta1, true);
+		ctx.closePath();
+		ctx.fillStyle = color;
+		ctx.strokeStyle = "white";
+		ctx.lineWidth = 2;
+		// shadow properties
+		//     ctx.shadowOffsetX = 1;
+		//    ctx.shadowOffsetY = 1;
+		//     ctx.shadowBlur = 1;
+		//    ctx.shadowColor = '#BFBFBF';  //grey shadow
+		//ctx.stroke();
+		ctx.fill();
+	}
+
+	ctx.globalAlpha = 1;
+
+	ctx.restore();
+};

@@ -1,5 +1,6 @@
 
-import {convertPercentToValue, isCanvasSupported} from '../helpers/utils';
+import TextBlock from '../core/text_block';
+import {convertPercentToValue, isCanvasSupported, drawSegment, getLineDashArray} from '../helpers/utils';
 
 export default function (plotUnit) {
 
@@ -720,7 +721,7 @@ export default function (plotUnit) {
 
 			if (dataSeries.indexLabelPlacement !== "inside") {
 
-				indexLabelRadius = outerRadius * indexLabelRadiusToRadiusRatio;
+				var indexLabelRadius = outerRadius * indexLabelRadiusToRadiusRatio;
 
 				for (i = 0; i < dataPoints.length; i++) {
 					var dataPointEO = dataPointEOs[i];

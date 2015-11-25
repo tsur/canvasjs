@@ -29,8 +29,7 @@ extend(Title, CanvasJSObject);
 
 Title.prototype.render = function () {
 
-	if (!this.text)
-		return;
+	if (!this.text) return;
 
 	var container = (!this.dockInsidePlotArea ? this.chart : this.chart.plotArea);
 	var freespace = container.layoutManager.getFreeSpace();

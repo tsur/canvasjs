@@ -5,6 +5,15 @@ import DataSeries from './data_series';
 import TextBlock from './text_block';
 import RenderHelper from '../helpers/render';
 import LayoutManager from './layout_manager';
+import EventManager from './event_manager';
+import ToolTip from './tooltip';
+import CultureInfo from '../core/culture_info';
+import Axis from '../core/axis';
+import Title from '../core/title';
+import Legend from '../core/legend';
+import AnimationHelper from '../helpers/animator';
+import {colorSets} from '../constants/themes';
+import {isDebugMode, defaultOptions} from '../constants/options';
 // import {inherits} from 'util';
 
 import {
@@ -16,7 +25,15 @@ import {
 	getMouseCoordinates,
 	getProperty,
 	isCanvasSupported,
-	inherit
+	extend,
+	createCanvas,
+	extendCtx,
+	getObjectId,
+	devicePixelBackingStoreRatio,
+	trimString,
+	numberFormat,
+	getLineDashArray,
+	intToHexColorString
 } from '../helpers/utils';
 
 import {
@@ -231,7 +248,7 @@ function Chart(containerId, options, publicChartReference) {
 	};
 }
 
-inherit(Chart, CanvasJSObject);
+extend(Chart, CanvasJSObject);
 
 //Update Chart Properties
 Chart.prototype._updateOptions = function () {
@@ -3089,7 +3106,7 @@ Chart.prototype.getPercentAndTotal = function (ds, dp) {
 		}
 	} else if (ds.type === "pie" || ds.type === "doughnut") {
 		total = 0;
-		for (i = 0; i < ds.dataPoints.length; i++) {
+		for (var i = 0; i < ds.dataPoints.length; i++) {
 
 			if (!isNaN(ds.dataPoints[i].y))
 				total += ds.dataPoints[i].y;
