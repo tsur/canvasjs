@@ -1,5 +1,7 @@
 
-import {isCanvasSupported} from '../helpers/utils';
+import RenderHelper from '../helpers/render';
+import AnimationHelper from '../helpers/animator';
+import {isCanvasSupported, compareNumbers, intToHexColorString, getLineDashArray} from '../helpers/utils';
 
 export default function(plotUnit) {
 	var ctx = plotUnit.targetCanvasCtx || this.plotArea.ctx;
@@ -48,7 +50,7 @@ export default function(plotUnit) {
 		ghostCtx.clip();
 	}
 
-	xValuePresent = [];
+	var xValuePresent = [];
 	for (var j = 0; j < plotUnit.dataSeriesIndexes.length; j++) {
 
 		var dataSeriesIndex = plotUnit.dataSeriesIndexes[j];

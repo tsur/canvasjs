@@ -33,7 +33,8 @@ import {
 	trimString,
 	numberFormat,
 	getLineDashArray,
-	intToHexColorString
+	intToHexColorString,
+	compareDataPointX
 } from '../helpers/utils';
 
 import {

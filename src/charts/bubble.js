@@ -1,5 +1,7 @@
 
-import {isCanvasSupported} from '../helpers/utils';
+import RenderHelper from '../helpers/render';
+import AnimationHelper from '../helpers/animator';
+import {isCanvasSupported, intToHexColorString} from '../helpers/utils';
 
 export default function (plotUnit) {
 
