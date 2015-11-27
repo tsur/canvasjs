@@ -60,4 +60,4 @@ export const formatDate = (date, formatString, culture) => {
 
 };
 
-Chart.version = "v1.8.0 Beta 2";
+Chart.version = "v1.8.2";
