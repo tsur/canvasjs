@@ -13,7 +13,7 @@ npm install canvasjs
 
 First of all, you need to import it. This can be achieved in different ways depending up on what module definition pattern your application is using.
 
-The CanvasJS package works by default with CommonJS so you can use it with browserify/webpack as shown below:
+The CanvasJS package works by default with CommonJS so you can use it with browserify as shown below:
 
 ```js
 // CommonJS
@@ -21,6 +21,12 @@ var CanvasJS = require('canvasjs');
 
 // If you are using ES6, then
 import CanvasJS from 'canvasjs';
+```
+
+Note that `canvasjs` is written in ES2015. It forces users building its projects with browserify to install the next dependences:
+
+```bash
+npm install babelify babel-preset-es2015 babel-preset-stage-1 --save-dev
 ```
 
 It is also possible to use it with AMD loaders as Require.js. If so, you can import it this way:
