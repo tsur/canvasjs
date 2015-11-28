@@ -1,6 +1,6 @@
 {
   "name": "canvasjs",
-  "version": "1.8.2",
+  "version": "1.8.0",
   "description": "CanvasJS charting library",
   "main": "src/main/index.js",
   "scripts": {
@@ -9,9 +9,9 @@
     "plato": "babel -d es5 src && plato -r -d docs/plato -t 'CanvasJS' es5 && rm -rf es5",
     "lint": "eslint --ext .js src",
     "bump": "npm run bump:patch",
-    "bump:patch": "node script/bump.js patch",
-    "bump:minor": "node script/bump.js minor",
-    "bump:major": "node script/bump.js major"
+    "bump:patch": "npm-bump patch origin master",
+    "bump:minor": "npm-bump minor origin master",
+    "bump:major": "npm-bump major origin master"
   },
   "repository": "https://github.com/Tsur/canvasjs.git",
   "license": "CC",
@@ -22,7 +22,8 @@
     "babelify": "^7.2.0",
     "browserify": "^12.0.1",
     "ghooks": "^1.0.1",
-    "uglify-js": "^2.6.1"
+    "uglify-js": "^2.6.1",
+    "npm-bump": "0.0.15"
   },
   "browserify": {
     "transform": [
