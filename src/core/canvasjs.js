@@ -1,3 +1,6 @@
+import {themes} from '../constants/themes';
+import {isDebugMode, defaultOptions} from '../constants/options';
+
 function CanvasJSObject(defaultsKey, options, theme, parent) {
   this._defaultsKey = defaultsKey;
 
@@ -147,3 +150,5 @@ CanvasJSObject.prototype.dispatchEvent = function (eventName, eventParameter, co
     this[eventName].call(context || this.chart._publicChartReference, eventParameter);
   }
 }
+
+export default CanvasJSObject;

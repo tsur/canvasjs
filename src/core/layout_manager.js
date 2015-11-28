@@ -64,3 +64,5 @@ LayoutManager.prototype.reset = function () {
   this._leftOccupied = this._padding;
   this._rightOccupied = this._padding;
 }
+
+export default LayoutManager;

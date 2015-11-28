@@ -1,5 +1,7 @@
 
-	var colorSets = {
+import {isCanvasSupported} from '../helpers/utils';
+
+export const colorSets = {
 
 		"colorSet1": [
 			"#369EAD",
@@ -80,9 +82,9 @@
 		//]
 
 	};
-	
-	var themes =
-		{
+
+export const themes = {
+
 			"theme1": {
 				Chart:
 					{

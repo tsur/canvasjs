@@ -1,3 +1,7 @@
+
+import CanvasJSObject from './canvasjs';
+import {extend, getProperty} from '../helpers/utils';
+
 function DataSeries(chart, options, theme, index, id) {
   DataSeries.base.constructor.call(this, "DataSeries", options, theme);
 
@@ -32,6 +36,7 @@ function DataSeries(chart, options, theme, index, id) {
     this.indexLabelFontSize = this.chart.getAutoFontSize(this.indexLabelFontSize);
   }
 }
+
 extend(DataSeries, CanvasJSObject);
 
 //Static Method that returns the axisPlacement for a given ChartType. Returns one of "normal", "xySwapped", "none"
@@ -470,3 +475,5 @@ DataSeries.prototype.getMarkerProperties = function (index, x, y, ctx) {
     borderThickness: markerBorderThickness
   }
 }
+
+export default DataSeries;

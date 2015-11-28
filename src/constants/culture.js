@@ -1,4 +1,4 @@
-var cultures = {
+export const cultures = {
   "en": {
     //Derives from the default options
   }//,
@@ -12,7 +12,7 @@ var cultures = {
   //}
 };
 
-var constants = {
+export const constants = {
   numberDuration: 1,
   yearDuration: 1000 * 60 * 60 * 24 * 364,
   monthDuration: 1000 * 60 * 60 * 24 * 30,

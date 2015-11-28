@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <script type="text/javascript">
+  window.onload = function () {
+    var chart = new CanvasJS.Chart("chartContainer", {
+
+      title:{
+        text: "Fruits sold in First Quarter"
+      },
+      data: [//array of dataSeries
+        { //dataSeries object
+
+         /*** Change type "column" to "bar", "area", "line" or "pie"***/
+         type: "line",
+         dataPoints: [
+         { label: "banana", y: 18 },
+         { label: "orange", y: 29 },
+         { label: "apple", y: 40 },
+         { label: "mango", y: 34 },
+         { label: "grape", y: 24 }
+         ]
+       }
+       ]
+     });
+
+    chart.render();
+  }
+  </script>
+  <script type="text/javascript" src="../dist/canvasjs.js"></script>
+</head>
+<body>
+  <div id="chartContainer" style="height: 300px; width: 100%;">
+  </div>
+</body>
+</html>

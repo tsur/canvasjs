@@ -4,19 +4,27 @@
   "description": "CanvasJS charting library",
   "main": "src/main/index.js",
   "scripts": {
-    "build": "browserify ./src/index.js --standalone 'CanvasJS' > dist/canvasjs.js && node_modules/uglify-js/bin/uglifyjs --compress --mangle -- dist/canvasjs.js > dist/canvasjs.min.js",
+    "build": "browserify ./src/main/index.js -d --s 'CanvasJS' > dist/canvasjs.js && node_modules/uglify-js/bin/uglifyjs --compress --mangle -- dist/canvasjs.js > dist/canvasjs.min.js",
     "docs": "rm -rf docs/out/$npm_package_version && jsdoc src --configure jsdoc.conf",
     "plato": "babel -d es5 src && plato -r -d docs/plato -t 'CanvasJS' es5 && rm -rf es5",
     "lint": "eslint --ext .js src",
     "bump": "npm run bump:patch",
-    "bump:patch": "node script/bump.js patch",
-    "bump:minor": "node script/bump.js minor",
-    "bump:major": "node script/bump.js major"
+    "bump:patch": "npm-bump patch origin master",
+    "bump:minor": "npm-bump minor origin master",
+    "bump:major": "npm-bump major origin master"
   },
   "repository": "https://github.com/Tsur/canvasjs.git",
   "license": "CC",
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "babel-preset-es2015": "^6.1.18",
+    "babel-preset-stage-1": "^6.1.18",
+    "babelify": "^7.2.0",
+    "browserify": "^12.0.1",
+    "ghooks": "^1.0.1",
+    "uglify-js": "^2.6.1",
+    "npm-bump": "0.0.15"
+  },
   "browserify": {
     "transform": [
       [

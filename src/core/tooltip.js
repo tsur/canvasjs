@@ -1,4 +1,11 @@
+
+import AnimationHelper from '../helpers/animator';
+import RenderHelper from '../helpers/render';
+import CanvasJSObject from './canvasjs';
+import {extend, isCanvasSupported, getObjectId, drawRect, drawSegment} from '../helpers/utils';
+
 function ToolTip(chart, options, theme) {
+
   ToolTip.base.constructor.call(this, "ToolTip", options, theme);
 
   this.chart = chart;
@@ -12,6 +19,7 @@ function ToolTip(chart, options, theme) {
 
   this._initialize();
 }
+
 extend(ToolTip, CanvasJSObject);
 
 ToolTip.prototype._initialize = function () {
@@ -165,7 +173,7 @@ ToolTip.prototype._updateToolTip = function (mouseX, mouseY) {
 
       var id = getObjectId(mouseX, mouseY, this.chart._eventManager.ghostCtx);
       if (id > 0 && typeof this.chart._eventManager.objectMap[id] !== "undefined") {//DataPoint/DataSeries event
-        eventObject = this.chart._eventManager.objectMap[id];
+        var eventObject = this.chart._eventManager.objectMap[id];
 
         if (eventObject.objectType === "legendItem")
           return;
@@ -280,6 +288,8 @@ ToolTip.prototype._updateToolTip = function (mouseX, mouseY) {
 
         } catch (e) {
         }
+
+        var toolTipLeft;
 
         if (entries[0].dataSeries.type === "pie" || entries[0].dataSeries.type === "doughnut" || entries[0].dataSeries.type === "funnel" || entries[0].dataSeries.type === "bar" || entries[0].dataSeries.type === "rangeBar" || entries[0].dataSeries.type === "stackedBar" || entries[0].dataSeries.type === "stackedBar100") {
           toolTipLeft = mouseX - 10 - this.container.clientWidth;
@@ -636,3 +646,5 @@ ToolTip.prototype.hide = function (resetOverlayedCanvas) {
   if (resetOverlayedCanvas)
     this.chart.resetOverlayedCanvas();
 }
+
+export default ToolTip;
