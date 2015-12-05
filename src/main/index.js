@@ -13,6 +13,7 @@
 *
 **/
 import Charts from '../core/charts';
+import TableChart from '../core/table';
 import CultureInfo from '../core/culture_info';
 import {colorSets} from '../constants/themes';
 import {cultures} from '../constants/culture';
@@ -25,6 +26,15 @@ export function Chart(containerId, options) {
   this.render = () =>  _chart.render(this.options);
 
   this.options = _chart._options;
+};
+
+export function Table(containerId, options) {
+
+  const _table = new TableChart(containerId, options);
+
+  this.render = data =>  _table.render(data);
+
+  this.options = _table.options;
 };
 
 

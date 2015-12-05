@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <script type="text/javascript">
+  window.onload = function () {
+    var chart = new CanvasJS.Table("chartContainer", {
+
+      title:{
+        text: "Fruits sold in First Quarter"
+      },
+
+      headers: {
+        n: "int",
+        label: "string",
+        y: "int"
+      }
+
+    });
+
+    var fruits = ["banana", "orange", "apple", "mango", "grape"];
+    var n = 5;
+
+    var random = function(){
+
+      var r = Math.floor(Math.random()*(fruits.length-1));
+
+      n++;
+
+      // console.log(n);
+
+      return {n: n, label: fruits[r], y: r};
+
+    }
+
+    chart.render([
+      { n: 5, label: "banana", y: 18 },
+      { n: 4, label: "orange", y: 29 },
+      { n: 3, label: "apple", y: 40 },
+      { n: 2, label: "mango", y: 34 },
+      { n: 1, label: "grape", y: 24 }
+    ]);
+
+    setInterval(function(){
+
+      chart.render([random()]);
+
+    }, 1000);
+
+  }
+  </script>
+  <script type="text/javascript" src="../dist/canvasjs.js"></script>
+</head>
+<body>
+  <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+</body>
+</html>

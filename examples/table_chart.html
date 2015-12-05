@@ -1,0 +1,42 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <script type="text/javascript">
+  window.onload = function () {
+    var chart = new CanvasJS.Table("chartContainer", {
+
+      title:{
+        text: "Fruits sold in First Quarter"
+      },
+
+      headers: {
+        n: "int",
+        label: "string",
+        y: "int"
+      }
+
+    });
+
+    chart.render([
+      { n: 12, label: "banana", y: 18 },
+      { n: 11, label: "banana", y: 18 },
+      { n: 10, label: "banana", y: 18 },
+      { n: 9, label: "orange", y: 29 },
+      { n: 8, label: "apple", y: 40 },
+      { n: 7, label: "mango", y: 34 },
+      { n: 6, label: "grape", y: 24 },
+      { n: 5, label: "grape", y: 24 },
+      { n: 4, label: "grape", y: 24 },
+      { n: 3, label: "mango", y: 24 },
+      { n: 2, label: "pera", y: 24 },
+      { n: 1, label: "higos", y: 50 },
+    ]);
+
+  }
+  </script>
+  <script type="text/javascript" src="../dist/canvasjs.js"></script>
+</head>
+<body>
+  <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+</body>
+</html>
