@@ -122,19 +122,27 @@ function paintHeaders(canvasCtx, headers, headersNumber){
 	}
 }
 
-function paintBody(canvasCtx, data, totalColumns, rowCursor, visibleRows){
+function paintBody(canvasCtx, data, headers, totalColumns, rowCursor, visibleRows){
 
 	// console.log(R.range(rowCursor, (rowCursor + visibleRows - 1)*totalColumns));
 
-	for(let position of R.range(0, (visibleRows - 1)*totalColumns)){
+	let i = 0;
 
-		if(position >= R.length(data)) break;
+	for(let row of R.range(0, visibleRows - 1)){
 
-		const x = getX(position, totalColumns);
-		const y = getY(position, totalColumns);
+		if(row >= R.length(data)) break;
 
-		paintCell(canvasCtx, x, y);
-		paintText(canvasCtx, data[position+rowCursor], x, y);
+		for(let header of headers){
+
+			const x = getX(i, totalColumns);
+			const y = getY(i, totalColumns)
+
+			// paintCell(canvasCtx, x, y);
+			paintText(canvasCtx, data[row+rowCursor][header], x, y);
+
+			i++;
+
+		}
 
 	}
 }
@@ -230,7 +238,7 @@ function addEventListeners(){
 		const coords = getCoordenates(this.canvasElement, event);
 		const offset = this.scrollBarOffset + (coords.y - this.lastYposition);
 		const total = this.height - CELL_HEIGHT -10 - this.scrollBarSize;
-		const maxLimit = this.data.length/this.totalColumns;
+		const maxLimit = this.data.length;
 
 		this.scrollBarOffset = offset < 0 ? 0 : offset;
 
@@ -240,8 +248,8 @@ function addEventListeners(){
 
 		this.lastYposition = coords.y;
 
-		const row = Math.ceil((this.scrollBarOffset/total) * maxLimit) * this.totalColumns;
-		const max = this.data.length - ((this.visibleRows - 1) * this.totalColumns);
+		const row = Math.ceil((this.scrollBarOffset/total) * maxLimit);
+		const max = this.data.length - ((this.visibleRows - 1));
 
 		this.rowCursor = row >= max ? max : row;
 
@@ -281,7 +289,7 @@ function addEventListeners(){
 
     if (event.wheelDelta > 0) { // scrolling down
 
-			if(this.rowCursor - this.totalColumns < 0){
+			if(this.rowCursor - 1 < 0){
 
 				this.scrollBarOffset = 0;
 				this.rowCursor = 0;
@@ -290,14 +298,14 @@ function addEventListeners(){
 			else {
 
 				// this.scrollBarOffset -= this.totalColumns;
-				this.rowCursor -= this.totalColumns;
+				this.rowCursor--;
 				this.scrollBarOffset = (this.rowCursor/this.data.length) * (this.height - CELL_HEIGHT -10 - this.scrollBarSize);
 
 			}
 
 		} else if(event.wheelDelta < 0){ // scrolling up
 
-			const maxLimit = this.data.length - ((this.visibleRows - 1) * this.totalColumns);
+			const maxLimit = this.data.length - (this.visibleRows - 1);
 
 			if(	this.rowCursor >= maxLimit){
 
@@ -307,7 +315,7 @@ function addEventListeners(){
 			}
 			else{
 
-				this.rowCursor += this.totalColumns;
+				this.rowCursor++;
 				this.scrollBarOffset = (this.rowCursor/this.data.length) * (this.height - CELL_HEIGHT -10 - this.scrollBarSize);
 
 			}
@@ -362,9 +370,9 @@ function Table(containerId, options) {
 //Update Chart Properties
 Table.prototype.render = function(data) {
 
-	const entries = R.isArrayLike(data) ? R.flatten(R.map(event => R.values(event), data)) : R.values(data);
+	// const entries = R.isArrayLike(data) ? R.flatten(R.map(event => R.values(event), data)) : R.values(data);
 
-	this.data = entries.concat(this.data);
+	if(data) this.data = data.concat(this.data);
 
 	this.paint();
 
@@ -378,9 +386,9 @@ Table.prototype.paint = function() {
 
 	paintHeaders(this.canvasCtx, this.headers, this.totalColumns);
 
-	paintBody(this.canvasCtx, this.data, this.totalColumns, this.rowCursor, this.visibleRows);
+	paintBody(this.canvasCtx, this.data, this.headers, this.totalColumns, this.rowCursor, this.visibleRows);
 
-	if(this.data.length/this.totalColumns >= this.visibleRows) {
+	if(this.data.length >= this.visibleRows) {
 
 		this.scrolling = true;
 
