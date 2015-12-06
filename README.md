@@ -3,6 +3,17 @@ CanvasJS, as depicted in its [official website](http://canvasjs.com), is a chart
 
 > CanvasJS is an easy to use JavaScript & HTML5 Charts library built on Canvas element. It runs across devices including iPhone, iPad, Android, Windows Phone, Microsoft Surface, Desktops, etc. This allows you to create rich dashboards that work on all the devices without compromising on maintainability or functionality of your web application. CanvasJS comes with beautiful themes and is over 10x faster than conventional Flash and SVG Charts – resulting in lightweight, beautiful and responsive dashboards.
 
+## Features
+
+This project includes many features you'll not find in the original CanvasJS library. Have a look at some of them below.
+
+* CommonJS Browserify Support
+* Fully written from scratch using ES2015
+* Highly Scalable and modular
+* Full Test Suite
+* Better performance
+* New **Table** chart, extremely fast (+10,000 rows in ~15ms), making it suitable for both big data and realtime projects.
+
 ## Download
 
 ```
