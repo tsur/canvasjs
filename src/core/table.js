@@ -170,7 +170,7 @@ function drawEllipse(ctx, x, y, w, h) {
 function paintScroll(table, canvasCtx, width, visibleRows, totalElements, totalColumns){
 
 	const totalSize = (visibleRows * CELL_HEIGHT) - 10;
-	const scrollBarSize = totalSize - (totalElements - (visibleRows * totalColumns));
+	const scrollBarSize = totalSize - (totalElements - visibleRows);
 
 	table.scrollBarSize = scrollBarSize < 30 ? 30 : scrollBarSize;
 
