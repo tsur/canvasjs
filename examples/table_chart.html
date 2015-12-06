@@ -17,20 +17,32 @@
 
     });
 
-    chart.render([
-      { n: 12, label: "banana", y: 18 },
-      { n: 11, label: "banana", y: 18 },
-      { n: 10, label: "banana", y: 18 },
-      { n: 9, label: "orange", y: 29 },
-      { n: 8, label: "apple", y: 40 },
-      { n: 7, label: "mango", y: 34 },
-      { n: 6, label: "grape", y: 24 },
-      { n: 5, label: "grape", y: 24 },
-      { n: 4, label: "grape", y: 24 },
-      { n: 3, label: "mango", y: 24 },
-      { n: 2, label: "pera", y: 24 },
-      { n: 1, label: "higos", y: 50 },
-    ]);
+    var fruits = ["banana", "orange", "apple", "mango", "grape"];
+    var total_rows = 10000;
+    var n = 0;
+
+    var random = function(){
+
+      var r = Math.floor(Math.random()*(fruits.length-1));
+
+      n++;
+
+      // console.log(n);
+
+      return {n: n, label: fruits[r], y: r};
+
+    }
+
+    var data = [];
+
+    for(var i = 0; i < total_rows; i++){
+
+      data.push(random());
+    }
+
+    console.time('start');
+    chart.render(data);
+    console.timeEnd('start');
 
   }
   </script>

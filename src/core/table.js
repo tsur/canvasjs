@@ -54,6 +54,9 @@ function createState(){
 	this.rowCursor = 0;
 	this.visibleRows = Math.ceil(Math.abs(this.height/CELL_HEIGHT));
 	this.scrollBarSize = 0;
+	this.scrollBarOffset = 0;
+	this.lastScrollBarOffset = 0;
+	this.scrollActived = false;
 
 	CELL_WIDTH = Math.ceil(Math.abs(this.width/this.totalColumns));
 
@@ -156,18 +159,19 @@ function drawEllipse(ctx, x, y, w, h) {
   ctx.stroke();
 }
 
-function paintScroll(table, canvasCtx, width, visibleRows, totalRows){
+function paintScroll(table, canvasCtx, width, visibleRows, totalElements, totalColumns){
 
-	const percentage = visibleRows / totalRows;
-	const totalSize = visibleRows * CELL_HEIGHT;
-	const scrollBarSize = (totalSize * percentage) - 10;
+	const totalSize = (visibleRows * CELL_HEIGHT) - 10;
+	const scrollBarSize = totalSize - (totalElements - (visibleRows * totalColumns));
 
 	table.scrollBarSize = scrollBarSize < 30 ? 30 : scrollBarSize;
 
 	// drawEllipse(canvasCtx, width - 15 , CELL_HEIGHT + 5, 10, scrollBarSize);
 
-	canvasCtx.fillRect(width - 15 , CELL_HEIGHT + 5, 10, table.scrollBarSize);
-	canvasCtx.strokeRect(width - 15 , CELL_HEIGHT + 5, 10, table.scrollBarSize);
+	canvasCtx.fillStyle = "#bbb";
+	canvasCtx.fillRect(width - 15 , CELL_HEIGHT + 5 + table.scrollBarOffset, 10, table.scrollBarSize);
+	canvasCtx.fillStyle = "transparent";
+	canvasCtx.strokeRect(width - 15 , CELL_HEIGHT + 5 + table.scrollBarOffset, 10, table.scrollBarSize);
 
 }
 
@@ -185,30 +189,6 @@ function getY(position, totalColumns){
 
 function addEventListeners(){
 
-	// const scrollingHandler =  event => {
-	//
-	//   if(!this.enableScroll) return;
-	//
-	// 	const delta = event.detail < 0 || event.wheelDelta > 0 ? 1 : -1;
-	//
-  //   if (delta > 0) { // scrolling down
-	//
-	// 		if(this.rowCursor - this.totalColumns < 0) this.rowCursor = 0;
-	// 		else this.rowCursor -= this.totalColumns;
-	//
-	// 	} else { // scrolling up
-	//
-	// 		const maxLimit = this.data.length - ((this.visibleRows - 1) * this.totalColumns);
-	//
-	// 		if(	this.rowCursor >= maxLimit) this.rowCursor = maxLimit;
-	// 		else this.rowCursor += this.totalColumns;
-	//
-	// 	}
-	//
-	//   return false;
-	//
-	// };
-	//
 	// this.canvasElement.addEventListener('DOMMouseScroll', debounce(scrollingHandler, 50), false);
 	// this.canvasElement.addEventListener('mousewheel', debounce(scrollingHandler, 50), false);
 	//
@@ -225,27 +205,130 @@ function addEventListeners(){
 
 	};
 
-	const scrollingHandler =  event => {
+	const mousedownHandler =  event => {
 
 		const coords = getCoordenates(this.canvasElement, event);
 
-		if(coords.x >= this.width -15 && coords.x <= this.width - 5 && coords.y >= CELL_HEIGHT + 5 && (coords.y - CELL_HEIGHT - 10) <= this.scrollBarSize ){
+		if(coords.x >= this.width -15 &&
+			coords.x <= this.width - 5 &&
+			coords.y >= (CELL_HEIGHT + 5 + this.scrollBarOffset) &&
+			coords.y <= (CELL_HEIGHT + 5 + this.scrollBarOffset + this.scrollBarSize) ){
 
-			console.log('scroll here');
+				this.lastYposition = coords.y;
+				this.enableScroll = true;
 
-		} else console.log('scroll not');
-
-
-	  if(!this.enableScroll) return;
-
-
+		}
 
 	  return false;
 
 	};
 
-	this.canvasElement.addEventListener('mousedown', debounce(scrollingHandler, 50), false);
+	const mousemoveHandler = event => {
 
+		if(!this.enableScroll) return;
+
+		const coords = getCoordenates(this.canvasElement, event);
+		const offset = this.scrollBarOffset + (coords.y - this.lastYposition);
+		const total = this.height - CELL_HEIGHT -10 - this.scrollBarSize;
+		const maxLimit = this.data.length/this.totalColumns;
+
+		this.scrollBarOffset = offset < 0 ? 0 : offset;
+
+		if(CELL_HEIGHT + 10 + this.scrollBarOffset + this.scrollBarSize >= this.height){
+			this.scrollBarOffset = total;
+		}
+
+		this.lastYposition = coords.y;
+
+		const row = Math.ceil((this.scrollBarOffset/total) * maxLimit) * this.totalColumns;
+		const max = this.data.length - ((this.visibleRows - 1) * this.totalColumns);
+
+		this.rowCursor = row >= max ? max : row;
+
+		this.paint();
+
+	};
+
+	// const mouseupHandler = event => {
+	//
+	// 	this.enableScroll = false;
+	//
+	// };
+
+	const mouseoutHandler = event => {
+
+		// this.enableScroll = false;
+
+	}
+	const mouseenterHandler = event => {
+
+		// this.enableScroll = false;
+
+	}
+
+	const documentMouseupHandler = event => {
+
+		this.enableScroll = false;
+
+	};
+
+	const mouseWheelHandler = event => {
+
+	  if(!this.scrolling) return false;
+
+		// const delta = event.detail < 0 || event.wheelDelta > 0 ? 1 : -1;
+		if(event.wheelDelta == 0) return false;
+
+    if (event.wheelDelta > 0) { // scrolling down
+
+			if(this.rowCursor - this.totalColumns < 0){
+
+				this.scrollBarOffset = 0;
+				this.rowCursor = 0;
+
+			}
+			else {
+
+				// this.scrollBarOffset -= this.totalColumns;
+				this.rowCursor -= this.totalColumns;
+				this.scrollBarOffset = (this.rowCursor/this.data.length) * (this.height - CELL_HEIGHT -10 - this.scrollBarSize);
+
+			}
+
+		} else if(event.wheelDelta < 0){ // scrolling up
+
+			const maxLimit = this.data.length - ((this.visibleRows - 1) * this.totalColumns);
+
+			if(	this.rowCursor >= maxLimit){
+
+				this.scrollBarOffset = this.height - CELL_HEIGHT -10 - this.scrollBarSize;
+				this.rowCursor = maxLimit;
+
+			}
+			else{
+
+				this.rowCursor += this.totalColumns;
+				this.scrollBarOffset = (this.rowCursor/this.data.length) * (this.height - CELL_HEIGHT -10 - this.scrollBarSize);
+
+			}
+
+		}
+
+		this.paint();
+
+	  return false;
+
+	};
+
+	this.canvasElement.addEventListener('mousedown', debounce(mousedownHandler, 50), false);
+	this.canvasElement.addEventListener('mousemove', mousemoveHandler, false);
+	// this.canvasElement.addEventListener('mouseup', debounce(mouseupHandler, 50), false);
+	this.canvasElement.addEventListener('mouseout', debounce(mouseoutHandler, 10), false);
+	this.canvasElement.addEventListener('mouseenter', debounce(mouseenterHandler, 10), false);
+	this.canvasElement.addEventListener('mousewheel', mouseWheelHandler, false);
+	// this.canvasElement.addEventListener('DOMMouseScroll', mouseWheelHandler, false);
+
+	document.addEventListener('mouseup', debounce(documentMouseupHandler, 50), false);
 }
 
 function render(){
@@ -299,9 +382,9 @@ Table.prototype.paint = function() {
 
 	if(this.data.length/this.totalColumns >= this.visibleRows) {
 
-		this.enableScroll = true;
+		this.scrolling = true;
 
-		paintScroll(this, this.canvasCtx, this.width, this.visibleRows-1, this.data.length/this.totalColumns);
+		paintScroll(this, this.canvasCtx, this.width, this.visibleRows-1, this.data.length, this.totalColumns);
 
 	}
 
