@@ -4,6 +4,11 @@ import debounce from 'debounce';
 import {createCanvas} from '../helpers/utils';
 
 const CELL_HEIGHT = 30;
+const FILL_STYLE = "transparent";
+const STROKE_STYLE = "#000000";
+const LINE_WIDTH = .4;
+const FONT = "normal normal 12px Verdana";
+
 let CELL_WIDTH = 150;
 
 function createDOMElements(containerId){
@@ -27,8 +32,8 @@ function createDOMElements(containerId){
 	this.canvasElement = createCanvas(this.width, this.height);
 	this.canvasElement.style.position = "absolute";
 
-	const border = "1px solid rgba(0 ,0, 0, 0.2)"
-	this.canvasElement.style.border = border;
+	// const border = "1px solid rgba(0 ,0, 0, 0.2)"
+	// this.canvasElement.style.border = border;
 
 	if (this.canvasElement.getContext) {
 
@@ -37,10 +42,10 @@ function createDOMElements(containerId){
 
 	}
 
-	this.canvasCtx.fillStyle = "transparent";
-	this.canvasCtx.strokeStyle = "#000000";
-	this.canvasCtx.lineWidth = .2;
-	this.canvasCtx.font = "normal normal 12px Verdana";
+	this.canvasCtx.fillStyle = FILL_STYLE;
+	this.canvasCtx.strokeStyle = STROKE_STYLE;
+	this.canvasCtx.lineWidth = LINE_WIDTH;
+	this.canvasCtx.font = FONT;
 	this.canvasCtx.textAlign = 'center';
   this.canvasCtx.textBaseline = 'middle';
 
@@ -60,6 +65,8 @@ function createState(){
 
 	CELL_WIDTH = Math.ceil(Math.abs(this.width/this.totalColumns));
 
+	this.meta = R.fromPairs(R.map(header => [header, {width:CELL_WIDTH}], this.headers));
+
 }
 
 function cleanCanvas(canvasCtx, width, height){
@@ -68,7 +75,7 @@ function cleanCanvas(canvasCtx, width, height){
 
 }
 
-function paintLine(canvasCtx, x, y, x2, y2){
+function paintHeaderLine(canvasCtx, x, y, x2, y2){
 
 	canvasCtx.beginPath();
 	canvasCtx.moveTo(x, y);
@@ -77,10 +84,35 @@ function paintLine(canvasCtx, x, y, x2, y2){
 
 }
 
-function paintCell(canvasCtx, x, y){
+function paintLine(canvasCtx, x, y, x2, y2, color, lineWidth){
 
-	// canvasCtx.fillRect(x,y, CELL_WIDTH, CELL_HEIGHT);
+	canvasCtx.beginPath();
+	canvasCtx.moveTo(x, y);
+	canvasCtx.lineTo(x2, y2);
+	canvasCtx.strokeStyle = color ? color: canvasCtx.strokeStyle;
+	canvasCtx.lineWidth = lineWidth ? lineWidth: canvasCtx.lineWidth;
+	canvasCtx.stroke();
+	canvasCtx.strokeStyle = STROKE_STYLE;
+	canvasCtx.lineWidth = LINE_WIDTH;
+
+}
+
+function paintCell(canvasCtx, x, y, width, color){
+
+	canvasCtx.fillStyle = color ? color: FILL_STYLE;
+	canvasCtx.fillRect(x, y, width, CELL_HEIGHT);
+	canvasCtx.fillStyle = FILL_STYLE;
 	// canvasCtx.strokeRect(x,y, CELL_WIDTH, CELL_HEIGHT);
+
+}
+
+function paintHeaderText(canvasCtx, text, x, y){
+
+	canvasCtx.fillStyle = "#000";
+	canvasCtx.font = "bold 12px Verdana";
+	canvasCtx.fillText(text, x + CELL_WIDTH/2, y + CELL_HEIGHT/2);
+	canvasCtx.fillStyle = FILL_STYLE;
+	canvasCtx.font = FONT;
 
 }
 
@@ -92,37 +124,33 @@ function paintText(canvasCtx, text, x, y){
 
 }
 
-function paintTableBorders(canvasCtx, totalColumns, totalRows){
+function paintTableBorders(canvasCtx, headers, meta, width, visibleRows){
 
 	// Draw vertical lines
-	for(let x of R.range(1, totalColumns)){
-
-		paintLine(canvasCtx, x*CELL_WIDTH, 0, x*CELL_WIDTH, totalRows*CELL_HEIGHT);
-
-	}
+	// @todo R.init(headers) store it in constructor to gain some time
+	// R.init(headers).forEach((header, pos) => paintLine(canvasCtx, (pos+1)*meta[header].width, 0, (pos+1)*meta[header].width, visibleRows*CELL_HEIGHT));
 
 	// Draw horizontal lines
-	for(let y of R.range(1, totalRows)){
-
-		paintLine(canvasCtx, 0, y*CELL_HEIGHT,  totalColumns*CELL_WIDTH, y*CELL_HEIGHT);
-
-	}
+	// R.range(1, visibleRows).forEach(y => paintLine(canvasCtx, 0, y*CELL_HEIGHT, width, y*CELL_HEIGHT));
 
 }
 
-function paintHeaders(canvasCtx, headers, headersNumber){
+function paintHeaders(canvasCtx, headers, meta, width){
 
-	for(let position of R.range(0, headersNumber)){
+	headers.forEach((header, pos) => {
 
-		const x = position * CELL_WIDTH;
+		const x = pos * meta[header].width;
 
-		paintCell(canvasCtx, x , 0);
-		paintText(canvasCtx, headers[position], x, 0);
+		paintCell(canvasCtx, x, 0, meta[header].width, "#f9f9f9");
+		paintHeaderText(canvasCtx, header, x, 0);
 
-	}
+	});
+
+	paintHeaderLine(canvasCtx, 0, CELL_HEIGHT, width, CELL_HEIGHT);
+
 }
 
-function paintBody(canvasCtx, data, headers, totalColumns, rowCursor, visibleRows){
+function paintBody(canvasCtx, data, headers, totalColumns, rowCursor, visibleRows, meta){
 
 	// console.log(R.range(rowCursor, (rowCursor + visibleRows - 1)*totalColumns));
 
@@ -137,7 +165,8 @@ function paintBody(canvasCtx, data, headers, totalColumns, rowCursor, visibleRow
 			const x = getX(i, totalColumns);
 			const y = getY(i, totalColumns)
 
-			// paintCell(canvasCtx, x, y);
+			if(row % 2 != 0) paintCell(canvasCtx, x, y, meta[header].width, "#f9f9f9");
+
 			paintText(canvasCtx, data[row+rowCursor][header], x, y);
 
 			i++;
@@ -176,7 +205,7 @@ function paintScroll(table, canvasCtx, width, visibleRows, totalElements, totalC
 
 	// drawEllipse(canvasCtx, width - 15 , CELL_HEIGHT + 5, 10, scrollBarSize);
 
-	canvasCtx.fillStyle = "#bbb";
+	canvasCtx.fillStyle = "#f4f4f4";
 	canvasCtx.fillRect(width - 15 , CELL_HEIGHT + 5 + table.scrollBarOffset, 10, table.scrollBarSize);
 	canvasCtx.fillStyle = "transparent";
 	canvasCtx.strokeRect(width - 15 , CELL_HEIGHT + 5 + table.scrollBarOffset, 10, table.scrollBarSize);
@@ -382,11 +411,11 @@ Table.prototype.paint = function() {
 
 	cleanCanvas(this.canvasCtx, this.width, this.height);
 
-	paintTableBorders(this.canvasCtx, this.totalColumns, this.visibleRows);
+	paintTableBorders(this.canvasCtx, this.headers, this.meta, this.width, this.visibleRows);
 
-	paintHeaders(this.canvasCtx, this.headers, this.totalColumns);
+	paintHeaders(this.canvasCtx, this.headers, this.meta, this.width);
 
-	paintBody(this.canvasCtx, this.data, this.headers, this.totalColumns, this.rowCursor, this.visibleRows);
+	paintBody(this.canvasCtx, this.data, this.headers, this.totalColumns, this.rowCursor, this.visibleRows, this.meta);
 
 	if(this.data.length >= this.visibleRows) {
 
