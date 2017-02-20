@@ -1,4 +1,6 @@
 
+import {constants} from '../constants/culture';
+
 export function extend(derived, base) {
 	derived.prototype = inherit(base.prototype);
 	derived.prototype.constructor = derived;
@@ -283,7 +285,7 @@ export function addEvent(obj, eventType, fn, useCapture) {
 }
 
 //#region formatting functions/methods
-export function dateFormat() {
+function _dateFormat() {
 
 	var reg = /D{1,4}|M{1,4}|Y{1,4}|h{1,2}|H{1,2}|m{1,2}|s{1,2}|f{1,3}|t{1,2}|T{1,2}|K|z{1,3}|"[^"]*"|'[^']*'/g;
 
@@ -418,6 +420,8 @@ export function dateFormat() {
 		return result;
 	};
 };
+
+export const dateFormat = _dateFormat();
 
 export function numberFormat(v, fs, cultureInfo) {
 	if (v === null)

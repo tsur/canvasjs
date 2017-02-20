@@ -1,7 +1,8 @@
 
 import CanvasJSObject from './canvasjs';
 import TextBlock from './text_block';
-import {extend, numberFormat, getLineDashArray} from '../helpers/utils';
+import {extend, numberFormat, getLineDashArray, convertToNumber, addToDateTime, dateFormat} from '../helpers/utils';
+import {constants} from '../constants/culture';
 
 function Axis(chart, options, type, position) {
 
