@@ -34,7 +34,8 @@ import {
 	numberFormat,
 	getLineDashArray,
 	intToHexColorString,
-	compareDataPointX
+	compareDataPointX,
+	dateFormat
 } from '../helpers/utils';
 
 import {
