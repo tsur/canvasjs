@@ -29,7 +29,7 @@ import {
 	createCanvas,
 	extendCtx,
 	getObjectId,
-	devicePixelBackingStoreRatio,
+	getDevicePixelBackingStoreRatio,
 	trimString,
 	numberFormat,
 	getLineDashArray,
@@ -59,6 +59,8 @@ import {
 	RangeSplineAreaChart,
 	PieChart
 } from '../charts/index';
+
+var devicePixelBackingStoreRatio = getDevicePixelBackingStoreRatio();
 
 function Chart(containerId, options, publicChartReference) {
 
