@@ -13,3 +13,6 @@ npm-*
 
 # test
 test/browser-build.js
+
+# dist
+examples/**/dist
